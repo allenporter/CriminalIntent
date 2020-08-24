@@ -3,6 +3,7 @@ package android.bignerdranch.com;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -15,7 +16,7 @@ import java.util.UUID;
  */
 final class CrimeLab {
   private static CrimeLab sCrimeLab;
-  private final Map<UUID, Crime> mCrimes = new TreeMap<UUID, Crime>();
+  private final Map<UUID, Crime> mCrimes = new LinkedHashMap<>();
 
   public static CrimeLab get() {
     if (sCrimeLab == null) {
