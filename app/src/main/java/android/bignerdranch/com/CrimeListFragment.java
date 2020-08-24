@@ -1,6 +1,7 @@
 package android.bignerdranch.com;
 
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +70,7 @@ public class CrimeListFragment extends Fragment {
     public void bind(Crime crime) {
       mCrime = crime;
       mTitleTextView.setText(mCrime.getTitle());
-      mDateTextView.setText(mCrime.getDate().toString());
+      mDateTextView.setText(DateFormat.getLongDateFormat(getContext()).format(mCrime.getDate()));
       if (mSolvedImageView != null) {
         mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
       }
