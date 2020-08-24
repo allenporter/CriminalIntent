@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,12 +41,19 @@ public class CrimeListFragment extends Fragment {
     private Crime mCrime;
     private TextView mTitleTextView;
     private TextView mDateTextView;
+    private ImageView mSolvedImageView;
 
     CrimeHolder(LayoutInflater inflator, ViewGroup parent, int viewType) {
       super(inflator.inflate(viewType, parent, false));
 
       mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
       mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
+      if (viewType == R.layout.list_item_crime) {
+        mSolvedImageView = (ImageView) itemView.findViewById(R.id.crime_solved);
+      } else {
+        // R.layout.list_item_crime_requires_police does not have the solved image
+        mSolvedImageView = null;
+      }
 
       itemView.setOnClickListener(this);
     }
@@ -62,6 +70,9 @@ public class CrimeListFragment extends Fragment {
       mCrime = crime;
       mTitleTextView.setText(mCrime.getTitle());
       mDateTextView.setText(mCrime.getDate().toString());
+      if (mSolvedImageView != null) {
+        mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
+      }
     }
   }
 
@@ -93,7 +104,7 @@ public class CrimeListFragment extends Fragment {
     @Override
     public int getItemViewType(int position) {
       Crime crime = mCrimes.get(position);
-      if (crime.isRequiresPolice()) {
+      if (crime.isRequiresPolice() && !crime.isSolved()) {
         return R.layout.list_item_crime_requires_police;
       }
       return R.layout.list_item_crime;
