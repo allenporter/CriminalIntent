@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,7 +36,7 @@ public class CrimeListFragment extends Fragment {
     return new CrimeAdapter(crimes);
   }
 
-  private class CrimeHolder extends RecyclerView.ViewHolder {
+  private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private Crime mCrime;
     private TextView mTitleTextView;
     private TextView mDateTextView;
@@ -45,6 +46,16 @@ public class CrimeListFragment extends Fragment {
 
       mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
       mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
+
+      itemView.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+      Toast.makeText(getActivity(),
+        mCrime.getTitle() + " clicked!",
+        Toast.LENGTH_SHORT)
+        .show();
     }
 
     public void bind(Crime crime) {
