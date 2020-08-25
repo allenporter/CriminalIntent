@@ -1,5 +1,6 @@
 package android.bignerdranch.com;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -17,10 +18,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.UUID;
 
 public class CrimeListFragment extends Fragment {
+  private static final int REQUEST_CRIME = 1;
+
   private RecyclerView mCrimeRecyclerView;
   private CrimeAdapter mAdapter;
+  private Integer mViewPosition = null;
 
   @Nullable
   @Override
@@ -38,7 +43,9 @@ public class CrimeListFragment extends Fragment {
   public void onResume() {
     super.onResume();
 
-    getAdapter().notifyDataSetChanged();
+    if (mViewPosition != null) {
+      getAdapter().notifyItemChanged(mViewPosition);
+    }
   }
 
   private CrimeAdapter getAdapter() {
@@ -50,13 +57,12 @@ public class CrimeListFragment extends Fragment {
     return mAdapter;
   }
 
-
-
   private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private Crime mCrime;
     private TextView mTitleTextView;
     private TextView mDateTextView;
     private ImageView mSolvedImageView;
+    private int mPosition;
 
     CrimeHolder(LayoutInflater inflator, ViewGroup parent, int viewType) {
       super(inflator.inflate(viewType, parent, false));
@@ -76,16 +82,18 @@ public class CrimeListFragment extends Fragment {
     @Override
     public void onClick(View view) {
       Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
-      startActivity(intent);
+      startActivityForResult(intent, REQUEST_CRIME);
+      mViewPosition = mPosition;
     }
 
-    public void bind(Crime crime) {
+    public void bind(Crime crime, int position) {
       mCrime = crime;
       mTitleTextView.setText(mCrime.getTitle());
       mDateTextView.setText(DateFormat.getLongDateFormat(getContext()).format(mCrime.getDate()));
       if (mSolvedImageView != null) {
         mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
       }
+      mPosition = position;
     }
   }
 
@@ -106,7 +114,7 @@ public class CrimeListFragment extends Fragment {
     @Override
     public void onBindViewHolder(@NonNull CrimeHolder holder, int position) {
       Crime crime = mCrimes.get(position);
-      holder.bind(crime);
+      holder.bind(crime, position);
     }
 
     @Override

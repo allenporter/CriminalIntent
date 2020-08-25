@@ -1,5 +1,7 @@
 package android.bignerdranch.com;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,6 +21,7 @@ import java.util.UUID;
 
 public class CrimeFragment extends Fragment {
   private static final String ARG_CRIME_ID = "crime_id";
+  private static final String EXTRA_CRIME_ID = "com.bignerdranch.android.criminalintent.crime_id";
 
   private Crime mCrime;
   private EditText mTitleField;
