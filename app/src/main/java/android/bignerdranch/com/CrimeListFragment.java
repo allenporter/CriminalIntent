@@ -25,7 +25,6 @@ public class CrimeListFragment extends Fragment {
 
   private RecyclerView mCrimeRecyclerView;
   private CrimeAdapter mAdapter;
-  private Integer mViewPosition = null;
 
   @Nullable
   @Override
@@ -42,10 +41,7 @@ public class CrimeListFragment extends Fragment {
   @Override
   public void onResume() {
     super.onResume();
-
-    if (mViewPosition != null) {
-      getAdapter().notifyItemChanged(mViewPosition);
-    }
+    getAdapter().notifyDataSetChanged();
   }
 
   private CrimeAdapter getAdapter() {
@@ -62,7 +58,6 @@ public class CrimeListFragment extends Fragment {
     private TextView mTitleTextView;
     private TextView mDateTextView;
     private ImageView mSolvedImageView;
-    private int mPosition;
 
     CrimeHolder(LayoutInflater inflator, ViewGroup parent, int viewType) {
       super(inflator.inflate(viewType, parent, false));
@@ -81,19 +76,17 @@ public class CrimeListFragment extends Fragment {
 
     @Override
     public void onClick(View view) {
-      Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
+      Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
       startActivityForResult(intent, REQUEST_CRIME);
-      mViewPosition = mPosition;
     }
 
-    public void bind(Crime crime, int position) {
+    public void bind(Crime crime) {
       mCrime = crime;
       mTitleTextView.setText(mCrime.getTitle());
       mDateTextView.setText(DateFormat.getLongDateFormat(getContext()).format(mCrime.getDate()));
       if (mSolvedImageView != null) {
         mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
       }
-      mPosition = position;
     }
   }
 
@@ -114,7 +107,7 @@ public class CrimeListFragment extends Fragment {
     @Override
     public void onBindViewHolder(@NonNull CrimeHolder holder, int position) {
       Crime crime = mCrimes.get(position);
-      holder.bind(crime, position);
+      holder.bind(crime);
     }
 
     @Override
