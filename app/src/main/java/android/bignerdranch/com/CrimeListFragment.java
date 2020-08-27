@@ -20,13 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import java.util.UUID;
 
-public class CrimeListFragment extends Fragment {
+public final class CrimeListFragment extends Fragment {
   private static final int REQUEST_CRIME = 1;
 
   private RecyclerView mCrimeRecyclerView;
   private CrimeAdapter mAdapter;
 
-  @Nullable
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
