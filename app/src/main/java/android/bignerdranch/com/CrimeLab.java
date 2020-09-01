@@ -25,15 +25,7 @@ final class CrimeLab {
     return sCrimeLab;
   }
 
-  private CrimeLab() {
-    for (int i = 0; i < 100; ++i) {
-      Crime crime = new Crime();
-      crime.setTitle("Crime #" + i);
-      crime.setSolved(i % 2 == 0);
-      crime.setRequiresPolice(i % 5 == 0);
-      mCrimes.put(crime.getId(), crime);
-    }
-  }
+  private CrimeLab() { }
 
   public List<Crime> getCrimes() {
     return new ArrayList<Crime>(mCrimes.values());
@@ -42,5 +34,12 @@ final class CrimeLab {
   @Nullable
   public Crime getCrime(UUID id) {
     return mCrimes.get(id);
+  }
+
+  public void addCrime(Crime c) {
+    if (mCrimes.containsKey(c.getId())) {
+      throw new IllegalArgumentException("Crime with id '" + c.getId() + "' already exists");
+    }
+    mCrimes.put(c.getId(), c);
   }
 }

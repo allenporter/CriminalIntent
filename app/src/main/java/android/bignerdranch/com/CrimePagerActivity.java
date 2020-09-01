@@ -23,7 +23,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import java.util.List;
 import java.util.UUID;
 
-public class CrimePagerActivity extends AppCompatActivity {
+public final class CrimePagerActivity extends AppCompatActivity {
   private static final String EXTRA_CRIME_ID = "com.bignerdranch.android.criminalintent.crime_id";
 
   private ViewPager2 mViewPager;
