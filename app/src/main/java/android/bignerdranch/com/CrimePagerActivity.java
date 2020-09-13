@@ -72,7 +72,7 @@ public final class CrimePagerActivity extends AppCompatActivity {
         public void onPageSelected(int position) {
           super.onPageSelected(position);
           mFirstCrime.setVisibility(position > 0 ? View.VISIBLE : View.GONE);
-          mLastCrime.setVisibility(position < mCrimes.size() ? View.VISIBLE : View.GONE);
+          mLastCrime.setVisibility(position < (mCrimes.size() - 1) ? View.VISIBLE : View.GONE);
         }
     });
 
