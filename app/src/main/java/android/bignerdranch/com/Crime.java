@@ -10,6 +10,8 @@ final class Crime {
   private boolean mSolved;
   private boolean mRequiresPolice;
 
+  private String mSuspect;
+
   public Crime() {
     this(UUID.randomUUID());
   }
@@ -27,31 +29,39 @@ final class Crime {
     return mTitle;
   }
 
-  public void setTitle(String mTitle) {
-    this.mTitle = mTitle;
+  public void setTitle(String title) {
+    this.mTitle = title;
   }
 
   public Date getDate() {
     return mDate;
   }
 
-  public void setDate(Date mDate) {
-    this.mDate = mDate;
+  public void setDate(Date date) {
+    this.mDate = date;
   }
 
   public boolean isSolved() {
     return mSolved;
   }
 
-  public void setSolved(boolean mSolved) {
-    this.mSolved = mSolved;
+  public void setSolved(boolean solved) {
+    this.mSolved = solved;
   }
 
   public boolean isRequiresPolice() {
     return mRequiresPolice;
   }
 
-  public void setRequiresPolice(boolean mRequiresPolice) {
-    this.mRequiresPolice = mRequiresPolice;
+  public void setRequiresPolice(boolean requiresPolice) {
+    this.mRequiresPolice = requiresPolice;
+  }
+
+  public String getSuspect() {
+    return mSuspect;
+  }
+
+  public void setSuspect(String suspect) {
+    this.mSuspect = suspect;
   }
 }
