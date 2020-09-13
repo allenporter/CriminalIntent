@@ -42,4 +42,8 @@ final class CrimeLab {
     }
     mCrimes.put(c.getId(), c);
   }
+
+  public void removeCrime(UUID id) {
+    mCrimes.remove(id);
+  }
 }

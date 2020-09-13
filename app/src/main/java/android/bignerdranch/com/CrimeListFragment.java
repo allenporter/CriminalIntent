@@ -112,9 +112,7 @@ public final class CrimeListFragment extends Fragment {
 
   private CrimeAdapter getAdapter() {
     if (mAdapter == null) {
-      CrimeLab lab = CrimeLab.get();
-      List<Crime> crimes = lab.getCrimes();
-      mAdapter = new CrimeAdapter(crimes);
+      mAdapter = new CrimeAdapter(CrimeLab.get());
     }
     return mAdapter;
   }
@@ -157,10 +155,10 @@ public final class CrimeListFragment extends Fragment {
   }
 
   private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder> {
-    private List<Crime> mCrimes;
+    private CrimeLab mLab;
 
-    CrimeAdapter(List<Crime> crimes) {
-      mCrimes = crimes;
+    CrimeAdapter(CrimeLab lab) {
+      this.mLab = lab;
     }
 
     @NonNull
@@ -172,18 +170,18 @@ public final class CrimeListFragment extends Fragment {
 
     @Override
     public void onBindViewHolder(@NonNull CrimeHolder holder, int position) {
-      Crime crime = mCrimes.get(position);
+      Crime crime = mLab.getCrimes().get(position);
       holder.bind(crime);
     }
 
     @Override
     public int getItemCount() {
-      return mCrimes.size();
+      return mLab.getCrimes().size();
     }
 
     @Override
     public int getItemViewType(int position) {
-      Crime crime = mCrimes.get(position);
+      Crime crime = mLab.getCrimes().get(position);
       if (crime.isRequiresPolice() && !crime.isSolved()) {
         return R.layout.list_item_crime_requires_police;
       }
