@@ -1,12 +1,14 @@
 package android.bignerdranch.com;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.UUID;
 
 /**
@@ -16,16 +18,20 @@ import java.util.UUID;
  */
 final class CrimeLab {
   private static CrimeLab sCrimeLab;
+  private final SQLiteDatabase mDb;
   private final Map<UUID, Crime> mCrimes = new LinkedHashMap<>();
 
-  public static CrimeLab get() {
+  public static CrimeLab get(Context context) {
     if (sCrimeLab == null) {
-      sCrimeLab = new CrimeLab();
+      SQLiteDatabase db = new CrimeBaseHelper(context).getWritableDatabase();
+      sCrimeLab = new CrimeLab(db);
     }
     return sCrimeLab;
   }
 
-  private CrimeLab() { }
+  private CrimeLab(SQLiteDatabase mDb) {
+    this.mDb = mDb;
+  }
 
   public List<Crime> getCrimes() {
     return new ArrayList<Crime>(mCrimes.values());

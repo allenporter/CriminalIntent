@@ -29,6 +29,7 @@ public final class CrimeListFragment extends Fragment {
   private static final int REQUEST_CRIME = 1;
   private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
 
+  private CrimeLab mCrimeLab;
   private RecyclerView mCrimeRecyclerView;
   private CrimeAdapter mAdapter;
   private boolean mSubtitleVisible = false;
@@ -36,6 +37,7 @@ public final class CrimeListFragment extends Fragment {
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    mCrimeLab = CrimeLab.get(getActivity());
     setHasOptionsMenu(true);
   }
 
@@ -87,7 +89,7 @@ public final class CrimeListFragment extends Fragment {
     switch (item.getItemId()) {
       case R.id.new_crime:
         Crime crime = new Crime();
-        CrimeLab.get().addCrime(crime);
+        mCrimeLab.addCrime(crime);
         Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
         startActivity(intent);
         return true;
@@ -102,8 +104,7 @@ public final class CrimeListFragment extends Fragment {
   }
 
   private void updateSubtitle() {
-    CrimeLab crimeLab = CrimeLab.get();
-    int crimeCount = crimeLab.getCrimes().size();
+    int crimeCount = mCrimeLab.getCrimes().size();
 
     String subtitle = getResources()
       .getQuantityString(R.plurals.subtitle_plurals, crimeCount, crimeCount);
@@ -116,7 +117,7 @@ public final class CrimeListFragment extends Fragment {
 
   private CrimeAdapter getAdapter() {
     if (mAdapter == null) {
-      mAdapter = new CrimeAdapter(CrimeLab.get());
+      mAdapter = new CrimeAdapter(mCrimeLab);
     }
     return mAdapter;
   }

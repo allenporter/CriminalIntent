@@ -49,7 +49,7 @@ public final class CrimeFragment extends Fragment {
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
-    mCrime = CrimeLab.get().getCrime(crimeId);
+    mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
   }
 
   @Override
@@ -97,7 +97,7 @@ public final class CrimeFragment extends Fragment {
     mDeleteButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        CrimeLab.get().removeCrime(mCrime.getId());
+        CrimeLab.get(getActivity()).removeCrime(mCrime.getId());
         getActivity().finish();
       }
     });
