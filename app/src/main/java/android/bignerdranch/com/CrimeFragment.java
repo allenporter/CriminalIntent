@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +108,6 @@ public final class CrimeFragment extends Fragment {
   }
 
   private void updateDate() {
-    mDateButton.setText(mCrime.getDate().toString());
+    mDateButton.setText(DateFormat.getLongDateFormat(getContext()).format(mCrime.getDate()));
   }
 }
