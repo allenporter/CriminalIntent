@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.zip.Inflater;
 
 public final class CrimeListFragment extends Fragment {
   private static final int REQUEST_CRIME = 1;
@@ -40,6 +41,7 @@ public final class CrimeListFragment extends Fragment {
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
     View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
 
     if (savedInstanceState != null) {
@@ -49,6 +51,7 @@ public final class CrimeListFragment extends Fragment {
     mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
     mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     mCrimeRecyclerView.setAdapter(getAdapter());
+
     updateSubtitle();
     
     return view;
@@ -128,21 +131,30 @@ public final class CrimeListFragment extends Fragment {
       super(inflator.inflate(viewType, parent, false));
 
       mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
-      mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
       if (viewType == R.layout.list_item_crime) {
+        mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
         mSolvedImageView = (ImageView) itemView.findViewById(R.id.crime_solved);
-      } else {
+        itemView.setOnClickListener(this);
+      } else if (viewType ==  R.layout.list_item_crime_requires_police){
+        mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
         // R.layout.list_item_crime_requires_police does not have the solved image
         mSolvedImageView = null;
+        itemView.setOnClickListener(this);
       }
-
-      itemView.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
+      if (mCrime == null) {
+        return;
+      }
       Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
       startActivityForResult(intent, REQUEST_CRIME);
+    }
+
+    public void bindPlaceholder() {
+      mCrime = null;
+      mTitleTextView.setText(R.string.no_crimes_label);
     }
 
     public void bind(Crime crime) {
@@ -171,17 +183,27 @@ public final class CrimeListFragment extends Fragment {
 
     @Override
     public void onBindViewHolder(@NonNull CrimeHolder holder, int position) {
+      if (mLab.getCrimes().isEmpty()) {
+        holder.bindPlaceholder();
+        return;
+      }
       Crime crime = mLab.getCrimes().get(position);
       holder.bind(crime);
     }
 
     @Override
     public int getItemCount() {
+      if (mLab.getCrimes().isEmpty()) {
+        return 1;
+      }
       return mLab.getCrimes().size();
     }
 
     @Override
     public int getItemViewType(int position) {
+      if (mLab.getCrimes().isEmpty()) {
+        return R.layout.list_item_no_crimes;
+      }
       Crime crime = mLab.getCrimes().get(position);
       if (crime.isRequiresPolice() && !crime.isSolved()) {
         return R.layout.list_item_crime_requires_police;
