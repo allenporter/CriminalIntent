@@ -63,7 +63,7 @@ public final class CrimePagerActivity extends AppCompatActivity {
       }
     });
 
-    mCrimes = CrimeLab.get().getCrimes();
+    mCrimes = CrimeLab.get(this).getCrimes();
     FragmentManager fragmentManager = getSupportFragmentManager();
     mViewPager.setAdapter(new Adapter(this));
 
