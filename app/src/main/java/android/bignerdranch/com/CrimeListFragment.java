@@ -62,6 +62,7 @@ public final class CrimeListFragment extends Fragment {
   @Override
   public void onResume() {
     super.onResume();
+    mAdapter.setCrimes(mCrimeLab.getCrimes());
     getAdapter().notifyDataSetChanged();
     updateSubtitle();
   }
@@ -117,7 +118,7 @@ public final class CrimeListFragment extends Fragment {
 
   private CrimeAdapter getAdapter() {
     if (mAdapter == null) {
-      mAdapter = new CrimeAdapter(mCrimeLab);
+      mAdapter = new CrimeAdapter(mCrimeLab.getCrimes());
     }
     return mAdapter;
   }
@@ -169,10 +170,14 @@ public final class CrimeListFragment extends Fragment {
   }
 
   private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder> {
-    private CrimeLab mLab;
+    private List<Crime> mCrimes;
 
-    CrimeAdapter(CrimeLab lab) {
-      this.mLab = lab;
+    CrimeAdapter(List<Crime> crimes) {
+      this.mCrimes = crimes;
+    }
+
+    public void setCrimes(List<Crime> crimes) {
+      this.mCrimes = crimes;
     }
 
     @NonNull
@@ -184,28 +189,28 @@ public final class CrimeListFragment extends Fragment {
 
     @Override
     public void onBindViewHolder(@NonNull CrimeHolder holder, int position) {
-      if (mLab.getCrimes().isEmpty()) {
+      if (mCrimes.isEmpty()) {
         holder.bindPlaceholder();
         return;
       }
-      Crime crime = mLab.getCrimes().get(position);
+      Crime crime = mCrimes.get(position);
       holder.bind(crime);
     }
 
     @Override
     public int getItemCount() {
-      if (mLab.getCrimes().isEmpty()) {
+      if (mCrimes.isEmpty()) {
         return 1;
       }
-      return mLab.getCrimes().size();
+      return mCrimes.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-      if (mLab.getCrimes().isEmpty()) {
+      if (mCrimes.isEmpty()) {
         return R.layout.list_item_no_crimes;
       }
-      Crime crime = mLab.getCrimes().get(position);
+      Crime crime = mCrimes.get(position);
       if (crime.isRequiresPolice() && !crime.isSolved()) {
         return R.layout.list_item_crime_requires_police;
       }
