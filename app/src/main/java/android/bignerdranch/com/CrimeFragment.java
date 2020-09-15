@@ -46,6 +46,7 @@ public final class CrimeFragment extends Fragment {
 
   private static final int REQUEST_DATE = 0;
   private static final int REQUEST_CONTACT = 1;
+  private static final int REQUEST_DIAL = 2;
 
   private Crime mCrime;
   private EditText mTitleField;
@@ -127,11 +128,14 @@ public final class CrimeFragment extends Fragment {
       }
     });
 
+    final Intent pickContact = new Intent(Intent.ACTION_PICK,
+      ContactsContract.Contacts.CONTENT_URI);
     mSuspectButton = (Button) v.findViewById(R.id.crime_suspect);
     mSuspectButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         requestContactPermission();
+        startActivityForResult(pickContact, REQUEST_CONTACT);
       }
     });
     if (mCrime.getSuspect() != null) {
@@ -153,6 +157,9 @@ public final class CrimeFragment extends Fragment {
       @Override
       public void onClick(View view) {
         // TODO: call suspect
+        Intent intent = new Intent(Intent.ACTION_DIAL,
+          Uri.parse(String.format("tel:%s", mCrime.getSuspectPhoneNumber())));
+        startActivityForResult(intent, REQUEST_DIAL);
       }
     });
 
@@ -260,18 +267,8 @@ public final class CrimeFragment extends Fragment {
             new String[]{android.Manifest.permission.READ_CONTACTS},
             PERMISSIONS_REQUEST_READ_CONTACTS);
         }
-      } else {
-        getContacts();
       }
-    } else {
-      getContacts();
     }
-  }
-
-  private void getContacts() {
-    final Intent pickContact = new Intent(Intent.ACTION_PICK,
-      ContactsContract.Contacts.CONTENT_URI);
-    startActivityForResult(pickContact, REQUEST_CONTACT);
   }
 
   private void updateState() {
