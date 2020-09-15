@@ -18,6 +18,7 @@
     </plurals>
     <string name="no_crimes_label">There are no crimes.</string>
     <string name="crime_suspect_label">Choose Suspect</string>
+    <string name="crime_call_suspect_label">Call Suspect</string>
     <string name="crime_report_label">Send Crime Report</string>
     <string name="crime_report">%1$s!
         The crime was discovered on %2$s.  %3$s, and %4$s

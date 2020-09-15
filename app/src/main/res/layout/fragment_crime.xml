@@ -82,6 +82,15 @@
         android:text="@string/crime_report_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/call_suspect" />
+
+    <Button
+        android:id="@+id/call_suspect"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/crime_call_suspect_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/crime_suspect" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
