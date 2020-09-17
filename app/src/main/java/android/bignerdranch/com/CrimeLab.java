@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import androidx.annotation.Nullable;
 
+import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -22,16 +23,18 @@ import java.util.UUID;
 final class CrimeLab {
   private static CrimeLab sCrimeLab;
   private final SQLiteDatabase mDb;
+  private final Context mContext;
 
   public static CrimeLab get(Context context) {
     if (sCrimeLab == null) {
       SQLiteDatabase db = new CrimeBaseHelper(context).getWritableDatabase();
-      sCrimeLab = new CrimeLab(db);
+      sCrimeLab = new CrimeLab(context.getApplicationContext(), db);
     }
     return sCrimeLab;
   }
 
-  private CrimeLab(SQLiteDatabase mDb) {
+  private CrimeLab(Context context, SQLiteDatabase mDb) {
+    this.mContext = context;
     this.mDb = mDb;
   }
 
@@ -84,6 +87,11 @@ final class CrimeLab {
     mDb.delete(CrimeDbSchema.CrimeTable.NAME,
       CrimeDbSchema.CrimeTable.Cols.UUID + " = ?",
       new String[] { uuidString });
+  }
+
+  public File getPhotoFile(Crime crime) {
+    File filesDir = mContext.getFilesDir();
+    return new File(filesDir, crime.getPhotoFilename());
   }
 
   private CrimeCursorWrapper queryCrimes(String whereClause, String[] whereArgs) {

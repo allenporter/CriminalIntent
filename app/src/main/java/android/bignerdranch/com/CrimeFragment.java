@@ -23,6 +23,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,6 +51,7 @@ public final class CrimeFragment extends Fragment {
   private static final int REQUEST_DIAL = 2;
 
   private Crime mCrime;
+  private File mPhotoFile;
   private EditText mTitleField;
   private Button mDateButton;
   private CheckBox mSovledCheckBox;
@@ -56,6 +59,8 @@ public final class CrimeFragment extends Fragment {
   private Button mSuspectButton;
   private Button mReportButton;
   private Button mCallSuspectButton;
+  private ImageButton mPhotoButton;
+  private ImageView mPhotoView;
 
   public static CrimeFragment newInstance(UUID crimeId) {
     Bundle args = new Bundle();
@@ -71,6 +76,7 @@ public final class CrimeFragment extends Fragment {
     super.onCreate(savedInstanceState);
     UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
     mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
+    mPhotoFile = CrimeLab.get(getActivity()).getPhotoFile(mCrime);
   }
 
   @Override
@@ -177,6 +183,9 @@ public final class CrimeFragment extends Fragment {
         startActivity(i);
       }
     });
+
+    mPhotoButton = (ImageButton) v.findViewById(R.id.crime_camera);
+    mPhotoView = (ImageView) v.findViewById(R.id.crime_photo);
 
     updateState();
 
