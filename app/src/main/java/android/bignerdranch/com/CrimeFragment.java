@@ -48,6 +48,7 @@ public final class CrimeFragment extends Fragment {
   private static final String ARG_CRIME_ID = "crime_id";
   private static final String DIALOG_DATE = "DialogDate";
   private static final String EXTRA_CRIME_ID = "com.bignerdranch.android.criminalintent.crime_id";
+  private static final String PHOTO_DIALOG_TAG = "photo_dialog";
 
   private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 1;
   private static final int PERMISSIONS_REQUEST_CAMERA = 2;
@@ -221,6 +222,13 @@ public final class CrimeFragment extends Fragment {
 
 
     mPhotoView = (ImageView) v.findViewById(R.id.crime_photo);
+    mPhotoView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        CrimePhotoDialogFragment fragment = CrimePhotoDialogFragment.newInstance(mCrime.getId());
+        fragment.show(getFragmentManager(), PHOTO_DIALOG_TAG);
+      }
+    });
     updatePhotoView();
 
     updateState();
