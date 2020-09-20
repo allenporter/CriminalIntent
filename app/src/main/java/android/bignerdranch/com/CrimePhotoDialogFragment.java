@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -55,13 +56,8 @@ public class CrimePhotoDialogFragment extends DialogFragment {
       .inflate(R.layout.fragment_crime_photo, null);
 
     mPhotoView = (ImageView) view.findViewById(R.id.crime_photo_zoom);
-    if (mPhotoFile == null | !mPhotoFile.exists()) {
-      mPhotoView.setImageDrawable(null);
-    } else {
-      Bitmap bitmap = BitmapUtils.getScaledBitmap(
-        mPhotoFile.getPath(), getActivity());
-      mPhotoView.setImageBitmap(bitmap);
-    }
+    ViewTreeObserver observer = mPhotoView.getViewTreeObserver();
+    observer.addOnGlobalLayoutListener(() -> updatePhotoView());
     mPhotoView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -70,5 +66,15 @@ public class CrimePhotoDialogFragment extends DialogFragment {
     });
 
     return view;
+  }
+
+  private void updatePhotoView() {
+    if (mPhotoFile == null | !mPhotoFile.exists()) {
+      mPhotoView.setImageDrawable(null);
+    } else {
+      Bitmap bitmap = BitmapUtils.getScaledBitmap(
+        mPhotoFile.getPath(), getActivity());
+      mPhotoView.setImageBitmap(bitmap);
+    }
   }
 }
