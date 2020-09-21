@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -65,6 +66,9 @@ public final class CrimeListFragment extends Fragment {
 
     mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
     mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new DeleteSwipeTouchHelper());
+    itemTouchHelper.attachToRecyclerView(mCrimeRecyclerView);
 
     updateUI();
     
@@ -174,6 +178,10 @@ public final class CrimeListFragment extends Fragment {
         mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
       }
     }
+
+    Crime getCrime() {
+      return mCrime;
+    }
   }
 
   private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder> {
@@ -224,4 +232,30 @@ public final class CrimeListFragment extends Fragment {
       return R.layout.list_item_crime;
     }
   }
+
+  private class DeleteSwipeTouchHelper extends ItemTouchHelper.SimpleCallback {
+
+    DeleteSwipeTouchHelper() {
+      super(0, ItemTouchHelper.LEFT);
+    }
+
+    @Override
+    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+      return false;
+    }
+
+    @Override
+    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+      if (direction == ItemTouchHelper.LEFT) {
+        CrimeHolder crimeHolder = (CrimeHolder) viewHolder;
+        Crime crime = crimeHolder.getCrime();
+        CrimeLab.get(getActivity()).removeCrime(crime.getId());
+        updateUI();
+        mCallbacks.onCrimeSelected(null);
+      }
+    }
+  }
+
+
+
 }

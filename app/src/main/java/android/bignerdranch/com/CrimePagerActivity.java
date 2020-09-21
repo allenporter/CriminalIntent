@@ -88,7 +88,7 @@ public final class CrimePagerActivity extends AppCompatActivity
 
   @Override
   public void onCrimeUpdated(Crime crime) {
-
+    finish();
   }
 
   private class Adapter extends FragmentStateAdapter {

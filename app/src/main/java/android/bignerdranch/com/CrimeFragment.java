@@ -165,7 +165,7 @@ public final class CrimeFragment extends Fragment {
       @Override
       public void onClick(View view) {
         CrimeLab.get(getActivity()).removeCrime(mCrime.getId());
-        getActivity().finish();
+        mCallbacks.onCrimeUpdated(null);
       }
     });
 

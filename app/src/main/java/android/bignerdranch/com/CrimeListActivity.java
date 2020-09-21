@@ -2,7 +2,9 @@ package android.bignerdranch.com;
 
 import android.content.Intent;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 public final class CrimeListActivity extends SingleFragmentActivity
   implements CrimeListFragment.Callback, CrimeFragment.Callback {
@@ -18,22 +20,37 @@ public final class CrimeListActivity extends SingleFragmentActivity
   }
 
   @Override
-  public void onCrimeSelected(Crime crime) {
+  public void onCrimeSelected(@Nullable Crime crime) {
     if (findViewById(R.id.detail_fragment_container) == null) {
-      Intent intent = CrimePagerActivity.newIntent(this, crime.getId());
-      startActivity(intent);
+      if (crime != null) {
+        Intent intent = CrimePagerActivity.newIntent(this, crime.getId());
+        startActivity(intent);
+      }
     } else {
-      Fragment newDetail = CrimeFragment.newInstance(crime.getId());
-      getSupportFragmentManager().beginTransaction()
-        .replace(R.id.detail_fragment_container, newDetail)
-        .commit();
+      FragmentManager manager = getSupportFragmentManager();
+      if (crime != null) {
+        Fragment newDetail = CrimeFragment.newInstance(crime.getId());
+        manager.beginTransaction()
+          .replace(R.id.detail_fragment_container, newDetail)
+          .commit();
+      } else {
+        Fragment existing = manager.findFragmentById(R.id.detail_fragment_container);
+        if (existing != null) {
+          manager.beginTransaction()
+            .remove(existing)
+            .commit();
+        }
+      }
     }
   }
 
   @Override
-  public void onCrimeUpdated(Crime crime) {
+  public void onCrimeUpdated(@Nullable Crime crime) {
     CrimeListFragment listFragment = (CrimeListFragment) getSupportFragmentManager()
       .findFragmentById(R.id.fragment_container);
     listFragment.updateUI();
+    if (crime == null) {
+      onCrimeSelected(null);
+    }
   }
 }
